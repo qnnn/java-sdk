@@ -193,7 +193,7 @@ public interface McpServer {
 		 */
 		private final Map<String, McpServerFeatures.AsyncPromptSpecification> prompts = new HashMap<>();
 
-		private final Map<McpServerFeatures.CompletionRefKey, McpServerFeatures.AsyncCompletionSpecification> completions = new HashMap<>();
+		private final Map<McpSchema.CompleteReference, McpServerFeatures.AsyncCompletionSpecification> completions = new HashMap<>();
 
 		private final List<BiFunction<McpAsyncServerExchange, List<McpSchema.Root>, Mono<Void>>> rootsChangeHandlers = new ArrayList<>();
 
@@ -639,7 +639,7 @@ public interface McpServer {
 		 */
 		private final Map<String, McpServerFeatures.SyncPromptSpecification> prompts = new HashMap<>();
 
-		private final Map<McpServerFeatures.CompletionRefKey, McpServerFeatures.SyncCompletionSpecification> completions = new HashMap<>();
+		private final Map<McpSchema.CompleteReference, McpServerFeatures.SyncCompletionSpecification> completions = new HashMap<>();
 
 		private final List<BiConsumer<McpSyncServerExchange, List<McpSchema.Root>>> rootsChangeHandlers = new ArrayList<>();
 

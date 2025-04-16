@@ -270,7 +270,7 @@ public class McpAsyncServer {
 		// broadcasting loggingNotification.
 		private LoggingLevel minLoggingLevel = LoggingLevel.DEBUG;
 
-		private final ConcurrentHashMap<McpServerFeatures.CompletionRefKey, McpServerFeatures.AsyncCompletionSpecification> completions = new ConcurrentHashMap<>();
+		private final ConcurrentHashMap<McpSchema.CompleteReference, McpServerFeatures.AsyncCompletionSpecification> completions = new ConcurrentHashMap<>();
 
 		private List<String> protocolVersions = List.of(McpSchema.LATEST_PROTOCOL_VERSION);
 
@@ -745,11 +745,10 @@ public class McpAsyncServer {
 					}
 				}
 
-				McpServerFeatures.CompletionRefKey key = McpServerFeatures.CompletionRefKey.from(request);
-				McpServerFeatures.AsyncCompletionSpecification specification = this.completions.get(key);
+				McpServerFeatures.AsyncCompletionSpecification specification = this.completions.get(request.ref());
 
 				if (specification == null) {
-					return Mono.error(new McpError("AsyncCompletionSpecification not found: " + key));
+					return Mono.error(new McpError("AsyncCompletionSpecification not found: " + request.ref()));
 				}
 
 				return specification.completionHandler().apply(exchange, request);

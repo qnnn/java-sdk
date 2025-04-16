@@ -42,7 +42,7 @@ public class McpServerFeatures {
 			List<McpServerFeatures.AsyncToolSpecification> tools, Map<String, AsyncResourceSpecification> resources,
 			List<McpSchema.ResourceTemplate> resourceTemplates,
 			Map<String, McpServerFeatures.AsyncPromptSpecification> prompts,
-			Map<CompletionRefKey, McpServerFeatures.AsyncCompletionSpecification> completions,
+			Map<McpSchema.CompleteReference, McpServerFeatures.AsyncCompletionSpecification> completions,
 			List<BiFunction<McpAsyncServerExchange, List<McpSchema.Root>, Mono<Void>>> rootsChangeConsumers,
 			String instructions) {
 
@@ -62,7 +62,7 @@ public class McpServerFeatures {
 				List<McpServerFeatures.AsyncToolSpecification> tools, Map<String, AsyncResourceSpecification> resources,
 				List<McpSchema.ResourceTemplate> resourceTemplates,
 				Map<String, McpServerFeatures.AsyncPromptSpecification> prompts,
-				Map<CompletionRefKey, McpServerFeatures.AsyncCompletionSpecification> completions,
+				Map<McpSchema.CompleteReference, McpServerFeatures.AsyncCompletionSpecification> completions,
 				List<BiFunction<McpAsyncServerExchange, List<McpSchema.Root>, Mono<Void>>> rootsChangeConsumers,
 				String instructions) {
 
@@ -114,7 +114,7 @@ public class McpServerFeatures {
 				prompts.put(key, AsyncPromptSpecification.fromSync(prompt));
 			});
 
-			Map<CompletionRefKey, McpServerFeatures.AsyncCompletionSpecification> completions = new HashMap<>();
+			Map<McpSchema.CompleteReference, McpServerFeatures.AsyncCompletionSpecification> completions = new HashMap<>();
 			syncSpec.completions().forEach((key, completion) -> {
 				completions.put(key, AsyncCompletionSpecification.fromSync(completion));
 			});
@@ -150,7 +150,7 @@ public class McpServerFeatures {
 			Map<String, McpServerFeatures.SyncResourceSpecification> resources,
 			List<McpSchema.ResourceTemplate> resourceTemplates,
 			Map<String, McpServerFeatures.SyncPromptSpecification> prompts,
-			Map<CompletionRefKey, McpServerFeatures.SyncCompletionSpecification> completions,
+			Map<McpSchema.CompleteReference, McpServerFeatures.SyncCompletionSpecification> completions,
 			List<BiConsumer<McpSyncServerExchange, List<McpSchema.Root>>> rootsChangeConsumers, String instructions) {
 
 		/**
@@ -170,7 +170,7 @@ public class McpServerFeatures {
 				Map<String, McpServerFeatures.SyncResourceSpecification> resources,
 				List<McpSchema.ResourceTemplate> resourceTemplates,
 				Map<String, McpServerFeatures.SyncPromptSpecification> prompts,
-				Map<CompletionRefKey, McpServerFeatures.SyncCompletionSpecification> completions,
+				Map<McpSchema.CompleteReference, McpServerFeatures.SyncCompletionSpecification> completions,
 				List<BiConsumer<McpSyncServerExchange, List<McpSchema.Root>>> rootsChangeConsumers,
 				String instructions) {
 
@@ -355,7 +355,7 @@ public class McpServerFeatures {
 	 * {@link McpAsyncServerExchange} used to interact with the client. The second
 	 * argument is a {@link io.modelcontextprotocol.spec.McpSchema.CompleteRequest}.
 	 */
-	public record AsyncCompletionSpecification(CompletionRefKey referenceKey,
+	public record AsyncCompletionSpecification(McpSchema.CompleteReference referenceKey,
 			BiFunction<McpAsyncServerExchange, McpSchema.CompleteRequest, Mono<McpSchema.CompleteResult>> completionHandler) {
 
 		/**
@@ -492,46 +492,8 @@ public class McpServerFeatures {
 	 * {@link McpSyncServerExchange} used to interact with the client. The second argument
 	 * is a {@link io.modelcontextprotocol.spec.McpSchema.CompleteRequest}.
 	 */
-	public record SyncCompletionSpecification(CompletionRefKey referenceKey,
+	public record SyncCompletionSpecification(McpSchema.CompleteReference referenceKey,
 			BiFunction<McpSyncServerExchange, McpSchema.CompleteRequest, McpSchema.CompleteResult> completionHandler) {
-	}
-
-	/**
-	 * A unique key representing a completion reference, composed of its type and
-	 * identifier. This key is used to look up asynchronous completion specifications in a
-	 * map-like structure.
-	 *
-	 * <p>
-	 * The {@code type} typically corresponds to the kind of reference, such as
-	 * {@code "ref/prompt"} or {@code "ref/resource"}, while the {@code identifier} is the
-	 * name or URI associated with the specific reference.
-	 *
-	 * @param type the reference type (e.g., "ref/prompt", "ref/resource")
-	 * @param identifier the reference identifier (e.g., prompt name or resource URI)
-	 */
-	public record CompletionRefKey(String type, String identifier) {
-
-		/**
-		 * Creates a {@code CompletionRefKey} from a {@link McpSchema.CompleteRequest}.
-		 * The key is derived from the request's reference type and its associated name or
-		 * URI.
-		 * @param request the {@code CompleteRequest} containing a prompt or resource
-		 * reference
-		 * @return a unique key based on the request's reference
-		 * @throws IllegalArgumentException if the reference type is unsupported
-		 */
-		public static CompletionRefKey from(McpSchema.CompleteRequest request) {
-			var ref = request.ref();
-			if (ref instanceof McpSchema.PromptReference pr) {
-				return new CompletionRefKey(ref.type(), pr.name());
-			}
-			else if (ref instanceof McpSchema.ResourceReference rr) {
-				return new CompletionRefKey(ref.type(), rr.uri());
-			}
-			else {
-				throw new IllegalArgumentException("Unsupported reference type: " + ref);
-			}
-		}
 	}
 
 }

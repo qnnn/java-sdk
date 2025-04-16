@@ -779,7 +779,7 @@ class WebFluxSseIntegrationTests {
 					new Prompt("code_review", "this is code review prompt", List.of()),
 					(mcpSyncServerExchange, getPromptRequest) -> null))
 			.completions(new McpServerFeatures.SyncCompletionSpecification(
-					new McpServerFeatures.CompletionRefKey("ref/prompt", "code_review"), completionHandler))
+					new McpSchema.PromptReference("ref/prompt", "code_review"), completionHandler))
 			.build();
 
 		try (var mcpClient = clientBuilder.build()) {
