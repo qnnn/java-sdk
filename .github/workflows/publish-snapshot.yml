@@ -32,13 +32,5 @@ jobs:
       - name: Generate Java docs
         run: mvn -Pjavadoc -B javadoc:aggregate
 
-      - name: Build with Maven and deploy to Sonatype snapshot repository
-        env:
-          MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
-          MAVEN_PASSWORD: ${{ secrets.OSSRH_TOKEN }}
-          MAVEN_GPG_PASSPHRASE: ${{ secrets.SIGNING_PASSPHRASE }}
-        run: |
-          mvn --batch-mode --update-snapshots -Dcheckstyle.skip=true deploy
-
-      - name: Capture project version
-        run: echo PROJECT_VERSION=$(mvn help:evaluate -Dexpression=project.version --quiet -DforceStdout) >> $GITHUB_ENV
+      - name: Run unit tests
+        run: mvn test
