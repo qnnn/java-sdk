@@ -451,7 +451,8 @@ public class McpAsyncServer {
 		return Mono.defer(() -> {
 			if (this.resources.put(resourceSpecification.resource().uri(), resourceSpecification) != null) {
 				logger.debug("Replaced resource handler: {}", resourceSpecification.resource().uri());
-			} else {
+			}
+			else {
 				logger.debug("Added resource handler: {}", resourceSpecification.resource().uri());
 			}
 			if (this.serverCapabilities.resources().listChanged()) {
@@ -601,7 +602,8 @@ public class McpAsyncServer {
 		return Mono.defer(() -> {
 			if (this.prompts.put(promptSpecification.prompt().name(), promptSpecification) != null) {
 				logger.debug("Replaced prompt handler: {}", promptSpecification.prompt().name());
-			} else {
+			}
+			else {
 				logger.debug("Added prompt handler: {}", promptSpecification.prompt().name());
 			}
 

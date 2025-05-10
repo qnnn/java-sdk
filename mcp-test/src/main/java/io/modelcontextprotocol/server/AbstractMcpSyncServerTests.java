@@ -266,19 +266,17 @@ public abstract class AbstractMcpSyncServerTests {
 			.capabilities(ServerCapabilities.builder().resources(true, false).build())
 			.build();
 
-		Resource resourceV1 = new Resource(TEST_RESOURCE_URI, "Test Resource",
-				"Resource with version 1.0.0", "text/plain", null);
+		Resource resourceV1 = new Resource(TEST_RESOURCE_URI, "Test Resource", "Resource with version 1.0.0",
+				"text/plain", null);
 		McpServerFeatures.SyncResourceSpecification specificationV1 = new McpServerFeatures.SyncResourceSpecification(
 				resourceV1, (exchange, req) -> new ReadResourceResult(List.of()));
-		assertThatCode(() -> mcpSyncServer.putResource(specificationV1))
-			.doesNotThrowAnyException();
+		assertThatCode(() -> mcpSyncServer.putResource(specificationV1)).doesNotThrowAnyException();
 
-		Resource resourceV2 = new Resource(TEST_RESOURCE_URI, "Test Resource",
-				"Resource with version 2.0.0", "text/plain", null);
+		Resource resourceV2 = new Resource(TEST_RESOURCE_URI, "Test Resource", "Resource with version 2.0.0",
+				"text/plain", null);
 		McpServerFeatures.SyncResourceSpecification specificationV2 = new McpServerFeatures.SyncResourceSpecification(
 				resourceV2, (exchange, req) -> new ReadResourceResult(List.of()));
-		assertThatCode(() -> mcpSyncServer.putResource(specificationV2))
-			.doesNotThrowAnyException();
+		assertThatCode(() -> mcpSyncServer.putResource(specificationV2)).doesNotThrowAnyException();
 
 		assertThatCode(() -> mcpSyncServer.closeGracefully()).doesNotThrowAnyException();
 	}
@@ -334,21 +332,21 @@ public abstract class AbstractMcpSyncServerTests {
 	}
 
 	@Test
-	void testPutPrompt(){
+	void testPutPrompt() {
 		var mcpSyncServer = McpServer.sync(createMcpTransportProvider())
 			.serverInfo("test-server", "1.0.0")
 			.capabilities(ServerCapabilities.builder().prompts(false).build())
 			.build();
 
 		Prompt promptV1 = new Prompt(TEST_PROMPT_NAME, "Prompt with version 1.0.0", List.of());
-		McpServerFeatures.SyncPromptSpecification specificationV1 = new McpServerFeatures.SyncPromptSpecification(promptV1,
-				(exchange, req) -> new GetPromptResult("Test prompt description", List
+		McpServerFeatures.SyncPromptSpecification specificationV1 = new McpServerFeatures.SyncPromptSpecification(
+				promptV1, (exchange, req) -> new GetPromptResult("Test prompt description", List
 					.of(new PromptMessage(McpSchema.Role.ASSISTANT, new McpSchema.TextContent("Test content")))));
 		assertThatCode(() -> mcpSyncServer.putPrompt(specificationV1)).doesNotThrowAnyException();
 
 		Prompt promptV2 = new Prompt(TEST_PROMPT_NAME, "Prompt with version 2.0.0", List.of());
-		McpServerFeatures.SyncPromptSpecification specificationV2 = new McpServerFeatures.SyncPromptSpecification(promptV2,
-				(exchange, req) -> new GetPromptResult("Test prompt description", List
+		McpServerFeatures.SyncPromptSpecification specificationV2 = new McpServerFeatures.SyncPromptSpecification(
+				promptV2, (exchange, req) -> new GetPromptResult("Test prompt description", List
 					.of(new PromptMessage(McpSchema.Role.ASSISTANT, new McpSchema.TextContent("Test content")))));
 		assertThatCode(() -> mcpSyncServer.putPrompt(specificationV2)).doesNotThrowAnyException();
 	}
