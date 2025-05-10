@@ -198,7 +198,7 @@ public abstract class AbstractMcpSyncServerTests {
 			.capabilities(ServerCapabilities.builder().resources(true, false).build())
 			.build();
 
-		Resource resource = new Resource(TEST_RESOURCE_URI, "Test Resource", "text/plain", "Test resource description",
+		Resource resource = new Resource(TEST_RESOURCE_URI, "Test Resource", "Test resource description", "text/plain",
 				null);
 		McpServerFeatures.SyncResourceSpecification specification = new McpServerFeatures.SyncResourceSpecification(
 				resource, (exchange, req) -> new ReadResourceResult(List.of()));
@@ -228,7 +228,7 @@ public abstract class AbstractMcpSyncServerTests {
 			.serverInfo("test-server", "1.0.0")
 			.build();
 
-		Resource resource = new Resource(TEST_RESOURCE_URI, "Test Resource", "text/plain", "Test resource description",
+		Resource resource = new Resource(TEST_RESOURCE_URI, "Test Resource", "Test resource description", "text/plain",
 				null);
 		McpServerFeatures.SyncResourceSpecification specification = new McpServerFeatures.SyncResourceSpecification(
 				resource, (exchange, req) -> new ReadResourceResult(List.of()));
